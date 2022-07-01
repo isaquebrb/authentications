@@ -9,5 +9,5 @@ public interface GetBurgerUseCase {
 
     List<Burger> getAllBurgers();
 
-    Burger getBurger(UUID id);
+    Burger getBurger(UUID burgerId);
 }

@@ -1,22 +1,24 @@
 package br.com.isaquebrb.authentications.core.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
+@AllArgsConstructor
 public class Burger {
 
     private UUID id;
 
     @Setter
     private String name;
-    private List<Ingredient> ingredients = new ArrayList<>();
 
     @Setter
-    private NutritionalInfo nutritionalInfo;
+    private String description;
+
+    @Setter
+    private Integer calories;
 
 }

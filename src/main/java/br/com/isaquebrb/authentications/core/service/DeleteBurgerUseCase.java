@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface DeleteBurgerUseCase {
 
-    void deleteBurger(UUID id);
+    void deleteBurger(UUID burgerId);
 }

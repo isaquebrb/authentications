@@ -1,6 +1,7 @@
 package br.com.isaquebrb.authentications.adapter.controller;
 
 import br.com.isaquebrb.authentications.adapter.presenter.request.BurgerRequest;
+import br.com.isaquebrb.authentications.application.mapper.BurgerMapper;
 import br.com.isaquebrb.authentications.core.domain.Burger;
 import br.com.isaquebrb.authentications.core.service.CreateBurgerUseCase;
 import br.com.isaquebrb.authentications.core.service.DeleteBurgerUseCase;
@@ -37,12 +38,14 @@ public class BurgerController {
 
     @PostMapping
     public ResponseEntity<Burger> createBurger(@RequestBody @Valid BurgerRequest burgerRequest) {
-        return new ResponseEntity<>(createBurgerUseCase.createBurger(burgerRequest.newBurger()), HttpStatus.CREATED);
+        Burger burger = BurgerMapper.fromRequest(burgerRequest);
+        return new ResponseEntity<>(createBurgerUseCase.createBurger(burger), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Burger> updateBurger(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(updatedBurgerUseCase.updateBurger(id));
+    public ResponseEntity<Burger> updateBurger(@PathVariable("id") UUID id,
+                                               @RequestBody @Valid BurgerRequest burgerRequest) {
+        return ResponseEntity.ok(updatedBurgerUseCase.updateBurger(id, burgerRequest));
     }
 
     @DeleteMapping("/{id}")
