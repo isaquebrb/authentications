@@ -18,25 +18,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .anyRequest()
-                        .authenticated())
+                        .antMatchers("/h2-console/**").permitAll()
+                        .antMatchers("/api/v1/burgers").hasRole(UserRole.USER_BURGER.name())
+                        .anyRequest().authenticated())
                 .httpBasic();
         return http.build();
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/h2-console/**");
-    }
-
-    @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("test"))
-                .roles("USER")
+        UserDetails user1 = User.builder()
+                .username("user1")
+                .password(passwordEncoder().encode("test12345"))
+                .roles(UserRole.USER_BURGER.name())
                 .build();
-        return new InMemoryUserDetailsManager(user);
+        UserDetails user2 = User.builder()
+                .username("user2")
+                .password(passwordEncoder().encode("test12345"))
+                .roles(UserRole.USER_ADMIN.name())
+                .build();
+        return new InMemoryUserDetailsManager(user1, user2);
     }
 
     @Bean
