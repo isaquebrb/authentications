@@ -10,6 +10,7 @@ import br.com.isaquebrb.authentications.core.service.UpdatedBurgerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,18 +38,21 @@ public class BurgerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('burger:write')")
     public ResponseEntity<Burger> createBurger(@RequestBody @Valid BurgerRequest burgerRequest) {
         Burger burger = BurgerMapper.fromRequest(burgerRequest);
         return new ResponseEntity<>(createBurgerUseCase.createBurger(burger), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('burger:write')")
     public ResponseEntity<Burger> updateBurger(@PathVariable("id") UUID id,
                                                @RequestBody @Valid BurgerRequest burgerRequest) {
         return ResponseEntity.ok(updatedBurgerUseCase.updateBurger(id, burgerRequest));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('burger:write')")
     public ResponseEntity<Void> deleteBurger(@PathVariable("id") UUID id) {
         deleteBurgerUseCase.deleteBurger(id);
         return ResponseEntity.noContent().build();
